@@ -107,6 +107,125 @@ data=pd.read_csv("income(1) (1).csv")
 data
 ```
 ![image](https://github.com/user-attachments/assets/6b9b38d5-d8f8-4dab-8fbc-d923385dc9ea)
+```
+data1=pd.read_csv('/content/titanic_dataset (1).csv')
+data1
+```
+
+![image](https://github.com/user-attachments/assets/40be0a5f-d7fc-46d1-8ce8-4e37a8bab56b)
+
+
+
+
+```
+data1=data1.dropna()
+x=data1.drop(['Survived','Name','Ticket'],axis=1)
+y=data1['Survived']
+data1['Sex']=data1['Sex'].astype('category')
+data1['Cabin']=data1['Cabin'].astype('category')
+data1['Embarked']=data1['Embarked'].astype('category')
+```
+```
+data1['Sex']=data1['Sex'].cat.codes
+data1['Cabin']=data1['Cabin'].cat.codes
+data1['Embarked']=data1['Embarked'].cat.codes
+```
+```
+data1
+```
+
+![image](https://github.com/user-attachments/assets/03996577-41bb-4412-b31f-14a9e9c31ae7)
+
+
+
+```
+k=5
+selector=SelectKBest(score_func=chi2,k=k)
+x=pd.get_dummies(x)
+x_new=selector.fit_transform(x,y)
+```
+```
+x_encoded=pd.get_dummies(x)
+selector=SelectKBest(score_func=chi2,k=5)
+x_new=selector.fit_transform(x_encoded,y)
+```
+```
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=x.columns[selected_feature_indices]
+print("Selected Features:")
+print(selected_features)
+```
+
+![image](https://github.com/user-attachments/assets/d03e6b8e-25f9-4562-85b1-c32261ab1652)
+
+
+```
+selector=SelectKBest(score_func=f_regression,k=5)
+x_new=selector.fit_transform(x_encoded,y)
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=x.columns[selected_feature_indices]
+print("Selected Features:")
+print(selected_features)
+```
+
+
+![image](https://github.com/user-attachments/assets/42a89e33-d693-4945-b001-e472692a70ee)
+
+```
+selector=SelectKBest(score_func=mutual_info_classif,k=5)
+x_new=selector.fit_transform(x,y)
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=x.columns[selected_feature_indices]
+print("Selected Features:")
+print(selected_features)
+```
+![image](https://github.com/user-attachments/assets/a5ef2ad2-d54e-460f-956a-d95b9f9e1a7b)
+
+
+```
+from sklearn.feature_selection import SelectFromModel
+from sklearn.ensemble import RandomForestClassifier
+```
+```
+model=RandomForestClassifier()
+sfm=SelectFromModel(model,threshold='mean')
+x=pd.get_dummies(x)
+sfm.fit(x,y)
+selected_features=x.columns[sfm.get_support()]
+print("Selected Features:")
+print(selected_features)
+```
+
+![image](https://github.com/user-attachments/assets/d024fddb-3894-49c1-8a7b-c512d6f3a22a)
+
+
+```
+from sklearn.ensemble import RandomForestClassifier
+```
+```
+model=RandomForestClassifier(n_estimators=100,random_state=42)
+model.fit(x,y)
+feature_selection=model.feature_importances_
+threshold=0.1
+selected_features=x.columns[feature_selection>threshold]
+print("Selected Features:")
+print(selected_features)
+```
+
+![image](https://github.com/user-attachments/assets/4c002a38-2b05-4764-bb85-e12acd17e8fc)
+
+
+```
+model=RandomForestClassifier(n_estimators=100,random_state=42)
+model.fit(x,y)
+feature_importance=model.feature_importances_
+threshold=0.15
+selected_features=x.columns[feature_importance>threshold]
+print("Selected Features:")
+print(selected_features)
+```
+![image](https://github.com/user-attachments/assets/115b5af5-5ec2-42b3-993f-e81e14e6b70d)
+
 
 # RESULT:
-       # INCLUDE YOUR RESULT HERE
+Thus the feature selection and feature scaling has been used on the given dataset and executed successfully.
